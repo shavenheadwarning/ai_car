@@ -77,7 +77,7 @@ int core0_main(void)
 
         }
         pass_roundabout_dispose(pass_roundabout_detect());
-        //enter_roundabout_dispose(enter_roundabout_detect());
+        enter_roundabout_dispose(enter_roundabout_detect());
         /*
         for(uint8 i=0;i<7;i++){
                             uint8*ptr =data_dev(signals_long [i]);
