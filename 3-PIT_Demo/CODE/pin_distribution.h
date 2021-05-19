@@ -32,8 +32,8 @@
 
 #define opa2_1 ADC0_CH5_A5    //短前瞻引脚定义
 #define opa2_2 ADC0_CH6_A6
-#define opa2_3 ADC0_CH3_A3
-#define opa2_4 ADC0_CH4_A4
+#define opa2_3 ADC0_CH4_A4
+#define opa2_4 ADC0_CH3_A3
 #define opa2_5 ADC0_CH1_A1
 #define opa2_6 ADC0_CH2_A2
 #define opa2_7 ADC0_CH0_A0
@@ -41,8 +41,8 @@
 
 //oled的引脚宏定义在逐飞的库中已定义好
 
-#define pwm_1_pos  ATOM1_CH0_P21_2//电机引脚
-#define pwm_1_neg  ATOM1_CH1_P21_3
+#define pwm_1_pos  ATOM1_CH1_P21_3//电机引脚
+#define pwm_1_neg  ATOM1_CH0_P21_2
 #define pwm_en     ATOM0_CH4_P21_6
 
 //编码器

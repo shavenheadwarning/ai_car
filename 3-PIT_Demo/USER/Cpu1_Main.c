@@ -43,8 +43,8 @@ void core1_main(void)
     while (TRUE)
     {
 
-        //pwm_duty(pwm_1_pos,4500);
-       // pwm_duty(pwm_1_neg,0);
+        //pwm_duty(pwm_1_pos,4000);
+        //pwm_duty(pwm_1_neg,0);
 
 
 

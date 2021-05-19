@@ -25,7 +25,8 @@ extern uint16 signals_long[7];
 extern uint16 signals_short[7];
 int16 last_steering_pwm=1900;
 
-int8 data_tf_flag=0;
+int8 data_tf_flag=1;//是否发送数据到串口
+int8 data_display=0;//是否显示数据
 
 int core0_main(void)
 {
@@ -70,10 +71,12 @@ int core0_main(void)
         while(loss_line_detect()){
             loss_line_dispose(last_steering_pwm);
 
-            for(int16 i=0;i<7;i++){
-                lcd_showuint16(5, i, signals_long[i]);
-                lcd_showuint16(120,i,signals_short[i]);
-                }
+            if(data_display){
+                       for(int16 i=0;i<7;i++){
+                           lcd_showuint16(5, i, signals_long[i]);
+                           lcd_showuint16(120,i,signals_short[i]);
+                       }
+                   }
 
         }
         pass_roundabout_dispose(pass_roundabout_detect());
@@ -86,12 +89,12 @@ int core0_main(void)
                         }
         uart_putchar(UART_2,255);
         */
-        /*
-        for(int16 i=0;i<7;i++){
-            lcd_showuint16(5, i, signals_long[i]);
-            lcd_showuint16(120,i,signals_short[i]);
+        if(data_display){
+            for(int16 i=0;i<7;i++){
+                lcd_showuint16(5, i, signals_long[i]);
+                lcd_showuint16(120,i,signals_short[i]);
+            }
         }
-        */
 
 
 
