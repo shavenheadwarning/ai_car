@@ -7,8 +7,9 @@
 
 #include "car_math.h"
 #include "stdlib.h"
-uint8 send_buff[9]={0};
-extern signals_short[7];
+#include "signal.h"
+uint8 send_buff[11]={0};
+extern int8 signals_short_convert[7];
 uint8* data_dev(uint16 data){
     uint8* data_array=(uint8*)malloc(sizeof(char)*4);
     data_array[0]=(data/1000)%10;
@@ -20,12 +21,14 @@ uint8* data_dev(uint16 data){
 
 void data_transfer(int16 last_ftm,int8 data_tf_flag){
     if(data_tf_flag==0)return;
+    signal_short_convert();
     for(int8 i=0;i<7;i++){
-            send_buff[i]=signals_short[i];
+            send_buff[i+2]=signals_short_convert[i];
     }
-    send_buff[7]=(uint8)((int32)(last_ftm - 1500) * 255 / 501);
-    send_buff[8]=0x5a;
-    uart_putbuff(UART_2,send_buff,9);
+    send_buff[9]=(uint8)((int32)(last_ftm - 1900) * 255 / 601);
+    send_buff[10]=0x5a;
+    uart_putbuff(UART_2,send_buff,11);
+    return;
 
 }
 

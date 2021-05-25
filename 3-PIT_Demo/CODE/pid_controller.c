@@ -15,6 +15,7 @@ int16 pwm_pre_error=0; //
 int16 pwm_last_error=0; //
 
 int16 current_pwm=4000;
+int8 motor_run_flag=0;
 int16 pid_incre_controller(int16 set_speed)
 {
     systick_delay_ms(STM1,5);
@@ -39,7 +40,10 @@ void motor_init(){
     gtm_pwm_init(pwm_1_pos, 14000, 0);
     gtm_pwm_init(pwm_1_neg, 14000, 0);
 }
+void motor_stop(){
+    motor_run_flag=!motor_run_flag;
 
+}
 
 
 

@@ -23,6 +23,7 @@
 #pragma section all "cpu0_dsram"
 extern uint16 signals_long[7];
 extern uint16 signals_short[7];
+extern uint8 send_buff[11];
 int16 last_steering_pwm=1900;
 
 int8 data_tf_flag=1;//是否发送数据到串口
@@ -38,7 +39,7 @@ int core0_main(void)
 	adclong_inits();
 	adcshort_inits();
 	//motor_init();
-	gpt12_init(GPT12_T2, GPT12_T2INB_P33_7, GPT12_T2EUDB_P33_6);
+	//gpt12_init(GPT12_T2, GPT12_T2INB_P33_7, GPT12_T2EUDB_P33_6);
 	lcd_init();
 	uart_init(UART_2,115200,uart_tx,uart_rx);
 	steering_init();
@@ -65,7 +66,7 @@ int core0_main(void)
         data_transfer(last_steering_pwm,data_tf_flag);
 
         //lcd_showint16(100,0,bias);
-        lcd_showint16(60,1,last_steering_pwm);
+        //lcd_showint16(60,1,last_steering_pwm);
 
 
         while(loss_line_detect()){
@@ -74,6 +75,7 @@ int core0_main(void)
             if(data_display){
                        for(int16 i=0;i<7;i++){
                            lcd_showuint16(5, i, signals_long[i]);
+                           lcd_showuint8(60,i,send_buff[i+2]);
                            lcd_showuint16(120,i,signals_short[i]);
                        }
                    }
@@ -92,6 +94,7 @@ int core0_main(void)
         if(data_display){
             for(int16 i=0;i<7;i++){
                 lcd_showuint16(5, i, signals_long[i]);
+                lcd_showint8(60,i,send_buff[i+2]);
                 lcd_showuint16(120,i,signals_short[i]);
             }
         }

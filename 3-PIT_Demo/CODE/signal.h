@@ -14,7 +14,7 @@ void adclong_inits();
 void adcshort_inits();
 void signal_long_read();
 void signal_short_read();
-
+void signal_short_convert();
 
 void normalize();
 

@@ -32,8 +32,8 @@
 
 #define opa2_1 ADC0_CH5_A5    //短前瞻引脚定义
 #define opa2_2 ADC0_CH6_A6
-#define opa2_3 ADC0_CH4_A4
-#define opa2_4 ADC0_CH3_A3
+#define opa2_3 ADC0_CH3_A3
+#define opa2_4 ADC0_CH4_A4
 #define opa2_5 ADC0_CH1_A1
 #define opa2_6 ADC0_CH2_A2
 #define opa2_7 ADC0_CH0_A0

@@ -13,6 +13,7 @@
 
 uint16 signals_short[7]={0};
 uint16 signals_long[7]={0};
+int8 signals_short_convert[7]={0};
 extern float signals_long_norma[7]={0};
 float limit_amplitude_neg=250;//限幅参数，需要调出来 右
 float limit_amplitude_pos=10.0;//左
@@ -49,27 +50,33 @@ void adcshort_inits(){
 void signal_long_read(){
 
 
-   signals_long[0]=adc_mean_filter(ADC_2, opa1_1, ADC_12BIT, 1);
-   signals_long[1]=adc_mean_filter(ADC_2, opa1_2, ADC_12BIT, 1);
-   signals_long[2]=adc_mean_filter(ADC_2, opa1_3, ADC_12BIT, 1);
-   signals_long[3]=adc_mean_filter(ADC_2, opa1_4, ADC_12BIT, 1);
-   signals_long[4]=adc_mean_filter(ADC_2, opa1_5, ADC_12BIT, 1);
-   signals_long[5]=adc_mean_filter(ADC_1, opa1_6, ADC_12BIT, 1);
-   signals_long[6]=adc_mean_filter(ADC_1, opa1_7, ADC_12BIT, 1);
+   signals_long[0]=adc_mean_filter(ADC_2, opa1_1, ADC_12BIT, 3);
+   signals_long[1]=adc_mean_filter(ADC_2, opa1_2, ADC_12BIT, 3);
+   signals_long[2]=adc_mean_filter(ADC_2, opa1_3, ADC_12BIT, 3);
+   signals_long[3]=adc_mean_filter(ADC_2, opa1_4, ADC_12BIT, 3);
+   signals_long[4]=adc_mean_filter(ADC_2, opa1_5, ADC_12BIT, 3);
+   signals_long[5]=adc_mean_filter(ADC_1, opa1_6, ADC_12BIT, 3);
+   signals_long[6]=adc_mean_filter(ADC_1, opa1_7, ADC_12BIT, 3);
 
 }
 
 void signal_short_read(){
 
-    signals_short[0]=(int16)adc_convert(ADC_0, opa2_1, ADC_12BIT);
-    signals_short[1]=(int16)adc_convert(ADC_0, opa2_2, ADC_12BIT);
-    signals_short[2]=(int16)adc_convert(ADC_0, opa2_3, ADC_12BIT);
-    signals_short[3]=(int16)adc_convert(ADC_0, opa2_4, ADC_12BIT);
-    signals_short[4]=(int16)adc_convert(ADC_0, opa2_5, ADC_12BIT);
-    signals_short[5]=(int16)adc_convert(ADC_0, opa2_6, ADC_12BIT);
-    signals_short[6]=(int16)adc_convert(ADC_0, opa2_7, ADC_12BIT);
+    signals_short[0]=adc_convert(ADC_0, opa2_1, ADC_8BIT);
+    signals_short[1]=adc_convert(ADC_0, opa2_2, ADC_8BIT);
+    signals_short[2]=adc_convert(ADC_0, opa2_3, ADC_8BIT);
+    signals_short[3]=adc_convert(ADC_0, opa2_4, ADC_8BIT);
+    signals_short[4]=adc_convert(ADC_0, opa2_5, ADC_8BIT);
+    signals_short[5]=adc_convert(ADC_0, opa2_6, ADC_8BIT);
+    signals_short[6]=adc_convert(ADC_0, opa2_7, ADC_8BIT);
 
 
+}
+void signal_short_convert(){
+    for(int8 i=0;i<7;i++){
+        signals_short_convert[i]=(int16)signals_short[i]-128;
+    }
+    return;
 }
 
 void normalize(){

@@ -18,15 +18,17 @@
  ********************************************************************************************************************/
 
 #include "headfile.h"
+
 #pragma section all "cpu1_dsram"
 
 volatile extern uint16 signals_long[7];
-int16 pwm_pos_init=5000;
-int16 pwm_neg_init=1700;
+int16 pwm_pos_init=3300;
+int16 pwm_neg_init=1000;
 float pwm_pos=0;
 int16 pwm_neg=0;
 const int16 neg_max=2500;
 const int16 pos_max=9000;
+
 
 void core1_main(void)
 {
@@ -40,7 +42,7 @@ void core1_main(void)
     //用户在此处调用各种初始化函数等
 
     enableInterrupts();
-    while (TRUE)
+    while (1)
     {
 
         //pwm_duty(pwm_1_pos,4000);
@@ -57,20 +59,21 @@ void core1_main(void)
      }
 
 
-     pwm_pos=(float)pwm_pos_init+(float)(signals_long[3])*2.7;
-     pwm_neg=pwm_neg_init+max_signals_6*2;
+     pwm_pos=(float)pwm_pos_init+(float)(signals_long[3]-250)*2.9;
+     pwm_neg=(float)pwm_neg_init+(float)(max_signals_6)*2.5;
      if(pwm_neg>neg_max)pwm_neg=neg_max;
      if(pwm_pos>pos_max)pwm_pos=pos_max;
 
+     /*
      _Bool flag3=((signals_long[3]>900||signals_long[0]>900)&&signals_long[2]>1150&&signals_long[1]<700)||signals_long[6]>800;
      while(flag3){
          pwm_duty(pwm_1_pos, 3500);
          pwm_duty(pwm_1_neg,0);
-     }
+     }*/
 
      pwm_duty(pwm_1_pos, (uint16)pwm_pos);
-     pwm_duty(pwm_1_neg,pwm_neg);
-
+     pwm_duty(pwm_1_neg,(uint16)pwm_neg);
+     }
      //systick_delay_ms(STM0,10);
 
         //pwm_duty(pwm_1_pos, 5000);
@@ -99,7 +102,7 @@ void core1_main(void)
         //lcd_showint16(120, 6, speed);
     	  */
 
-    }
+
 }
 
 

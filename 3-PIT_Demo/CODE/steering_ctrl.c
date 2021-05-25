@@ -52,7 +52,7 @@ int16 steering_angle_ctrl(int16 bias){
 
     last_steering_error=current_steering_error;
     pwm_duty(ftm_steering, steering_duty);
-    systick_delay_ms(STM0,10);
+    //systick_delay_ms(STM0,10);
 
     return steering_duty;
 
@@ -109,7 +109,7 @@ void enter_roundabout_dispose(int16 flag){
            lcd_showchar(80,0,'R');
            if(flag==1){
                int16 last_pwm=steering_angle_ctrl(error_calculate_roundabout());
-               lcd_showint16(60,4,last_pwm);
+               //lcd_showint16(60,4,last_pwm);
                systick_delay_ms(STM0,500);
                data_transfer(last_pwm, data_tf_flag);
            }
