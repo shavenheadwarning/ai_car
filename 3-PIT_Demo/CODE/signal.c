@@ -11,7 +11,7 @@
 #include "math.h"
 #include "SEEKFREE_18TFT.h"
 
-uint16 signals_short[7]={0};
+uint8 signals_short[7]={0};
 uint16 signals_long[7]={0};
 int8 signals_short_convert[7]={0};
 extern float signals_long_norma[7]={0};
@@ -114,9 +114,9 @@ int16 error_calculate(){
    float induc5=signals_norma[4];
 */
    float horizontal_error=(signals_long_norma[0]-signals_long_norma[6])/(signals_long_norma[0]+signals_long_norma[6]);
-   float vertical_error1=(signals_long_norma[1]-signals_long_norma[5])/(signals_long_norma[1]+signals_long_norma[5]);
+   float vertical_error1=1.5*(signals_long_norma[1]-signals_long_norma[5])/(signals_long_norma[1]+signals_long_norma[5]);
    //float vertical_error2=(signals_long_norma[4]-signals_long_norma[2])/(signals_long_norma[4]+signals_long_norma[2]);
-   float error=(horizontal_error*(signals_long[0]+signals_long[6])+vertical_error1*(signals_long[1]+signals_long[5]))/1000;
+   float error=(horizontal_error*(signals_long[0]+signals_long[6])+vertical_error1*(signals_long[1]+signals_long[5]))/700;
 
    /*
    float induc_error1=(induc5-induc1)/(induc5+induc1);

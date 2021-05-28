@@ -24,9 +24,10 @@ int16 current_steering_error=0; //当前误差
 //int16 cumulant_steering_error; //累积误差
 int16 last_steering_error=0;//前一次误差
 float init_kp=0.4;
-float steering_kp=1.00;
+float steering_kp=0.9;
 float steering_kd=0.2;
-
+extern int16 last_steering_pwm0;
+extern int16 last_steering_pwm1;
 
 void steering_init(){  //舵机初始化
     gtm_pwm_init(ftm_steering, 100, steering_mid);
@@ -51,6 +52,7 @@ int16 steering_angle_ctrl(int16 bias){
 
 
     last_steering_error=current_steering_error;
+
     pwm_duty(ftm_steering, steering_duty);
     //systick_delay_ms(STM0,10);
 
@@ -65,11 +67,15 @@ int16 steering_angle_ctrl(int16 bias){
 void loss_line_dispose(int16 last_steering_pwm){
     if(last_steering_pwm<steering_mid){
         pwm_duty(ftm_steering,steering_right_max);
-        data_transfer(steering_right_max,data_tf_flag);
+        last_steering_pwm0=steering_right_max;
+        last_steering_pwm1=steering_right_max;
+        //data_transfer(steering_right_max,steering_right_max,data_tf_flag);
     }
     else {
         pwm_duty(ftm_steering, steering_left_max);
-        data_transfer(steering_left_max,data_tf_flag);
+        last_steering_pwm0=steering_right_max;
+        last_steering_pwm1=steering_right_max;
+        //data_transfer(steering_left_max,steering_left_max,data_tf_flag);
 
     }
     //lcd_showint16(100,4,last_steering_pwm);
@@ -91,12 +97,16 @@ void pass_roundabout_dispose(int16 flag){
 
     else if(flag==1){
         pwm_duty(ftm_steering,steering_mid);
-        data_transfer(1800,data_tf_flag);
+        last_steering_pwm0=steering_mid;
+         last_steering_pwm1=steering_mid;
+        //data_transfer(1900,1900,data_tf_flag);
         systick_delay_ms(STM0,300);
     }
     else if(flag==-1){
         pwm_duty(ftm_steering,steering_mid);
-        data_transfer(1800,data_tf_flag);
+        last_steering_pwm0=steering_mid;
+        last_steering_pwm1=steering_mid;
+        //data_transfer(1900,1900,data_tf_flag);
         systick_delay_ms(STM0,300);
     }
     return;
@@ -111,11 +121,11 @@ void enter_roundabout_dispose(int16 flag){
                int16 last_pwm=steering_angle_ctrl(error_calculate_roundabout());
                //lcd_showint16(60,4,last_pwm);
                systick_delay_ms(STM0,500);
-               data_transfer(last_pwm, data_tf_flag);
+               data_transfer(last_pwm,last_pwm, data_tf_flag);
            }
            else if(flag==-1){
                pwm_duty(ftm_steering,1700);
-               data_transfer(1700,data_tf_flag);
+               data_transfer(1700,1700,data_tf_flag);
                //systick_delay_ms(STM0,300);
            }
            signal_long_read();

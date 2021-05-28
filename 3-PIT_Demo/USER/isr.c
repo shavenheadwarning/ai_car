@@ -20,18 +20,20 @@
 
 #include "isr_config.h"
 #include "isr.h"
+#include "car_math.h"
 //在isr.c的中断函数，函数定义的第二个参数固定为0，请不要更改，即使你用CPU1处理中断也不要更改，需要CPU1处理中断只需要在isr_config.h内修改对应的宏定义即可
 
-uint8 stop_buff[11]={0};
+extern int16 last_steering_pwm0;
+extern int16 last_steering_pwm1;
+extern int8 data_tf_flag;
 //PIT中断函数  示例
-uint16 time;
+
 
 IFX_INTERRUPT(cc60_pit_ch0_isr, 0, CCU6_0_CH0_ISR_PRIORITY)
 {
 	enableInterrupts();//开启中断嵌套
 	PIT_CLEAR_FLAG(CCU6_0, PIT_CH0);
-    time++;
-	printf("pit count: %d\n", time);
+	data_transfer(last_steering_pwm0,last_steering_pwm1,data_tf_flag);
 }
 
 
@@ -181,10 +183,10 @@ IFX_INTERRUPT(uart2_rx_isr, 0, UART2_RX_INT_PRIO)
     IfxAsclin_Asc_isrReceive(&uart2_handle);
 
     wireless_uart_callback();
-
-    motor_init();
+    //motor_stop2();
+    //motor_stop();
     //uart_putbuff(UART_2,stop_buff,11);
-    systick_delay_ms(STM0,10000);
+    //systick_delay_ms(STM0,1000);
     //motor_run_flag=!motor_run_flag;
     //uart_putchar(UART_2,'s');
 

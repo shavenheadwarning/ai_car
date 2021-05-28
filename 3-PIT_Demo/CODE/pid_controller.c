@@ -5,7 +5,7 @@
 #include "pin_distribution.h"
 #include "zf_gtm_pwm.h"
 #include "zf_stm_systick.h"
-
+#include "zf_gpio.h"
 float pwm_kp=0.2;
 float pwm_ki=0;
 float pwm_kd=0;
@@ -41,8 +41,15 @@ void motor_init(){
     gtm_pwm_init(pwm_1_neg, 14000, 0);
 }
 void motor_stop(){
-    motor_run_flag=!motor_run_flag;
-
+   pwm_duty(pwm_1_pos,0);
+   pwm_duty(pwm_1_neg,0);
+   systick_delay(STM1, 1000);
+   return;
+}
+void motor_stop2(){
+    gpio_init(P21_2, 0, 0, NO_PULL);
+    gpio_init(P21_3, 0, 0, NO_PULL);
+    return;
 }
 
 

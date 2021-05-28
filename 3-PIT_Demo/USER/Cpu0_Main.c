@@ -1,4 +1,4 @@
-/*********************************************************************************************************************
+/*****  ****************************************************************************************************************
  * COPYRIGHT NOTICE
  * Copyright (c) 2020,逐飞科技
  * All rights reserved.
@@ -22,11 +22,12 @@
 
 #pragma section all "cpu0_dsram"
 extern uint16 signals_long[7];
-extern uint16 signals_short[7];
-extern uint8 send_buff[11];
+extern uint8 signals_short[7];
+extern int8 send_buff[11];
+int16 last_steering_pwm0=1900;
+int16 last_steering_pwm1=1900;
 int16 last_steering_pwm=1900;
-
-int8 data_tf_flag=1;//是否发送数据到串口
+int8 data_tf_flag=0;//是否发送数据到串口
 int8 data_display=0;//是否显示数据
 
 int core0_main(void)
@@ -42,6 +43,7 @@ int core0_main(void)
 	//gpt12_init(GPT12_T2, GPT12_T2INB_P33_7, GPT12_T2EUDB_P33_6);
 	lcd_init();
 	uart_init(UART_2,115200,uart_tx,uart_rx);
+	pit_interrupt_ms(CCU6_0,PIT_CH0,10);
 	steering_init();
 	//中断函数在isr.c中 函数名称为cc60_pit_ch0_isr
 	//中断相关的配置参数在isr_config.h内
@@ -54,31 +56,23 @@ int core0_main(void)
 
     while (TRUE)
     {
-
-        //pwm_duty(ftm_steering,2200);
-
-
         signal_long_read();
         signal_short_read();
 
-
+        last_steering_pwm1=last_steering_pwm0;
         last_steering_pwm=steering_angle_ctrl(error_calculate());
-        data_transfer(last_steering_pwm,data_tf_flag);
-
-        //lcd_showint16(100,0,bias);
-        //lcd_showint16(60,1,last_steering_pwm);
-
+        last_steering_pwm0=last_steering_pwm;
+        //data_transfer(last_steering_pwm0,last_steering_pwm1,data_tf_flag);
 
         while(loss_line_detect()){
             loss_line_dispose(last_steering_pwm);
-
             if(data_display){
-                       for(int16 i=0;i<7;i++){
-                           lcd_showuint16(5, i, signals_long[i]);
-                           lcd_showuint8(60,i,send_buff[i+2]);
-                           lcd_showuint16(120,i,signals_short[i]);
-                       }
-                   }
+               for(int16 i=0;i<7;i++){
+                  lcd_showuint16(5, i, signals_long[i]);
+                  lcd_showint8(60,i,send_buff[i+2]);
+                  lcd_showuint8(120,i,signals_short[i]);
+               }
+            }
 
         }
         pass_roundabout_dispose(pass_roundabout_detect());
@@ -95,38 +89,12 @@ int core0_main(void)
             for(int16 i=0;i<7;i++){
                 lcd_showuint16(5, i, signals_long[i]);
                 lcd_showint8(60,i,send_buff[i+2]);
-                lcd_showuint16(120,i,signals_short[i]);
+                lcd_showuint8(120,i,signals_short[i]);
             }
         }
 
-
-
-        /*
-        for(uint8 i=0;i<7;i++){
-                    uint8*ptr =data_dev(signals_short[i]);
-                    uart_putbuff(UART_2,ptr,4);
-                    free(ptr);
-                }
-        uint8* ptr_ftm=data_dev(last_steering_pwm);
-
-
-        uart_putbuff(UART_2,ptr_ftm,4);
-        free(ptr_ftm);
-        uart_putchar(UART_2,255);
-        */
-
-
-
-
-
-
-
-
-
-
-		//程序运行之后 PIT中断每执行一次就会打印一次
-        //将结果通过串口打印，可以先学习printf例程，了解如何使用printf
     }
 }
 
 #pragma section all restore
+
