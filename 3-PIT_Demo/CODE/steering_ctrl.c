@@ -24,7 +24,7 @@ int16 current_steering_error=0; //当前误差
 //int16 cumulant_steering_error; //累积误差
 int16 last_steering_error=0;//前一次误差
 float init_kp=0.4;
-float steering_kp=0.9;
+float steering_kp=0.5;
 float steering_kd=0.2;
 extern int16 last_steering_pwm0;
 extern int16 last_steering_pwm1;

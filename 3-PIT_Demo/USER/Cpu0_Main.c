@@ -27,7 +27,7 @@ extern int8 send_buff[11];
 int16 last_steering_pwm0=1900;
 int16 last_steering_pwm1=1900;
 int16 last_steering_pwm=1900;
-int8 data_tf_flag=0;//是否发送数据到串口
+int8 data_tf_flag=1;//是否发送数据到串口
 int8 data_display=0;//是否显示数据
 
 int core0_main(void)
@@ -59,7 +59,6 @@ int core0_main(void)
         signal_long_read();
         signal_short_read();
 
-        last_steering_pwm1=last_steering_pwm0;
         last_steering_pwm=steering_angle_ctrl(error_calculate());
         last_steering_pwm0=last_steering_pwm;
         //data_transfer(last_steering_pwm0,last_steering_pwm1,data_tf_flag);

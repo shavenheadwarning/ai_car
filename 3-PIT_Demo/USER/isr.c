@@ -24,7 +24,6 @@
 //在isr.c的中断函数，函数定义的第二个参数固定为0，请不要更改，即使你用CPU1处理中断也不要更改，需要CPU1处理中断只需要在isr_config.h内修改对应的宏定义即可
 
 extern int16 last_steering_pwm0;
-extern int16 last_steering_pwm1;
 extern int8 data_tf_flag;
 //PIT中断函数  示例
 
@@ -33,7 +32,7 @@ IFX_INTERRUPT(cc60_pit_ch0_isr, 0, CCU6_0_CH0_ISR_PRIORITY)
 {
 	enableInterrupts();//开启中断嵌套
 	PIT_CLEAR_FLAG(CCU6_0, PIT_CH0);
-	data_transfer(last_steering_pwm0,last_steering_pwm1,data_tf_flag);
+	data_transfer(last_steering_pwm0,data_tf_flag);
 }
 
 

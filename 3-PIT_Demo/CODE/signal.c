@@ -14,9 +14,9 @@
 uint8 signals_short[7]={0};
 uint16 signals_long[7]={0};
 int8 signals_short_convert[7]={0};
-extern float signals_long_norma[7]={0};
-float limit_amplitude_neg=250;//限幅参数，需要调出来 右
-float limit_amplitude_pos=10.0;//左
+float signals_long_norma[7]={0};
+//float limit_amplitude_neg=250;//限幅参数，需要调出来 右
+//float limit_amplitude_pos=10.0;//左
 float vertical_weight=1.2;
 
 
@@ -92,19 +92,18 @@ void normalize(){
         if(signals_long[i]<signals_min)signals_min=signals_long[i];
         if(signals_long[i]>signals_max)signals_max=signals_long[i];
     }
-
-    signals_long_norma[0]=(float)(signals_long[0]-signals_min)/(float)(signals_max-signals_min);
-    signals_long_norma[1]=(float)(signals_long[1]-signals_min)/(float)(signals_max-signals_min);
-    signals_long_norma[2]=(float)(signals_long[2]-signals_min)/(float)(signals_max-signals_min);
-    signals_long_norma[3]=(float)(signals_long[3]-signals_min)/(float)(signals_max-signals_min);
-    signals_long_norma[4]=(float)(signals_long[4]-signals_min)/(float)(signals_max-signals_min);
-    signals_long_norma[5]=(float)(signals_long[5]-signals_min)/(float)(signals_max-signals_min);
-    signals_long_norma[6]=(float)(signals_long[6]-signals_min)/(float)(signals_max-signals_min);
+    float max_min=(float)(signals_max-signals_min);
+    signals_long_norma[0]=(float)(signals_long[0]-signals_min)/max_min;
+    signals_long_norma[1]=(float)(signals_long[1]-signals_min)/max_min;
+    signals_long_norma[2]=(float)(signals_long[2]-signals_min)/max_min;
+    signals_long_norma[3]=(float)(signals_long[3]-signals_min)/max_min;
+    signals_long_norma[4]=(float)(signals_long[4]-signals_min)/max_min;
+    signals_long_norma[5]=(float)(signals_long[5]-signals_min)/max_min;
+    signals_long_norma[6]=(float)(signals_long[6]-signals_min)/max_min;
 
 }
 int16 error_calculate(){
 
-   signal_long_read();
    normalize();
    /*
    float induc1=signals_norma[0];
@@ -114,9 +113,9 @@ int16 error_calculate(){
    float induc5=signals_norma[4];
 */
    float horizontal_error=(signals_long_norma[0]-signals_long_norma[6])/(signals_long_norma[0]+signals_long_norma[6]);
-   float vertical_error1=1.5*(signals_long_norma[1]-signals_long_norma[5])/(signals_long_norma[1]+signals_long_norma[5]);
+   float vertical_error1=1.3*(signals_long_norma[1]-signals_long_norma[5])/(signals_long_norma[1]+signals_long_norma[5]);
    //float vertical_error2=(signals_long_norma[4]-signals_long_norma[2])/(signals_long_norma[4]+signals_long_norma[2]);
-   float error=(horizontal_error*(signals_long[0]+signals_long[6])+vertical_error1*(signals_long[1]+signals_long[5]))/700;
+   float error=(horizontal_error*(signals_long[0]+signals_long[6])+vertical_error1*(signals_long[1]+signals_long[5]))/3;
 
    /*
    float induc_error1=(induc5-induc1)/(induc5+induc1);
@@ -126,11 +125,13 @@ int16 error_calculate(){
    //float induc_error=induc_error1;
 
     */
+   /*
    int16 result=0;
    if(horizontal_error>0)result=(int16)(error*limit_amplitude_pos);
    else result=(int16)(error*limit_amplitude_neg);
+   */
 
-   return result;
+   return (int16)(error);
 }
 
 
@@ -141,7 +142,7 @@ int16 error_calculate_roundabout(){
      float horizontal_error=(signals_long_norma[0]-signals_long_norma[6])/(signals_long_norma[0]+signals_long_norma[6]);
      float vertical_error1=(signals_long_norma[2]-signals_long_norma[4])/(signals_long_norma[2]+signals_long_norma[4]);
      //float vertical_error2=(signals_long_norma[4]-signals_long_norma[2])/(signals_long_norma[4]+signals_long_norma[2]);
-     float error=(horizontal_error*(signals_long[0]+signals_long[6])+vertical_error1*(signals_long[2]+signals_long[4]))/1000;
+     float error=(horizontal_error*(signals_long[0]+signals_long[6])+vertical_error1*(signals_long[2]+signals_long[4]))/3.5;
 
      /*
      float induc_error1=(induc5-induc1)/(induc5+induc1);
@@ -151,11 +152,12 @@ int16 error_calculate_roundabout(){
      //float induc_error=induc_error1;
 
       */
+     /*
      int16 result=0;
      if(horizontal_error>0)result=(int16)(error*limit_amplitude_pos)/2;
      else result=(int16)(error*limit_amplitude_neg)/2;
-
-     return result;
+    */
+     return (int16)error;
 }
 
 _Bool right_angle_detect(){

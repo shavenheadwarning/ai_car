@@ -61,8 +61,8 @@ void core1_main(void)
      }
 
 
-     pwm_pos=(float)pwm_pos_init+(float)(signals_long[3]-250)*4.0;
-     pwm_neg=(float)pwm_neg_init+(float)(max_signals_6)*2.5;
+     pwm_pos=(float)pwm_pos_init+(float)(signals_long[3]-300)*3;
+     pwm_neg=(float)pwm_neg_init+(float)(max_signals_6)*2.7;
      if(pwm_neg>neg_max)pwm_neg=neg_max;
      if(pwm_pos>pos_max)pwm_pos=pos_max;
 
